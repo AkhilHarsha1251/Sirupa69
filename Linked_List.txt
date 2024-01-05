@@ -1,0 +1,394 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{int data,c;
+ struct node *link;
+};
+
+
+void collect(struct node *head,int n)
+                {struct node *temp,*current=head;
+                 while(n!=0){ temp=(struct node*)malloc(sizeof(struct node));
+                              scanf("%d",&temp->data);temp->c=n;
+                              temp->link=NULL;
+                              current->link=temp;
+                              current=temp;
+                              n--;
+                             }
+                 }
+void print(struct node *head){ struct node *temp=head;
+                               while(temp!=NULL) { printf("%d,%d ",temp->data,temp->c);
+                                                   temp=temp->link;}
+                             }
+
+
+struct node* addatfront(struct node *head,int x)
+                          {struct node *temp=(struct node*)malloc(sizeof(struct node));
+                           temp->data=x;
+                           temp->c=69;
+                           temp->link=head;
+                           return temp;
+                          }
+//addatfront2 is optimized than addatfront                        
+struct node* addatfront2(struct node **headpointer,int x)
+                          {struct node *temp=(struct node*)malloc(sizeof(struct node));
+                           temp->data=x;
+                           temp->c=69;
+                           temp->link=*headpointer; //by dereferencing the headpointer(dobuble pointer) w'll get head(normal pointer)  
+                           *headpointer=temp;
+                          }
+
+
+void addatend(struct node *head,int x)
+                          {struct node *temp=(struct node*)malloc(sizeof(struct node));
+                           struct node *ptr=head;
+                           temp->data=x;
+                           temp->c=69;
+                           temp->link=NULL;
+                           while(ptr->link!=NULL) ptr=ptr->link;
+                           ptr->link=temp;
+                          }
+//addatend2 is optimized than addatend but dont use caz we need to change entire code                          
+struct node* addatend2(struct node *tailptr,int x)
+                           {struct node *temp=(struct node*)malloc(sizeof(struct node));
+                            temp->data=x;
+                            temp->c=69;
+                            temp->link=NULL;
+                            tailptr->link=temp;
+                            return temp;
+                           }
+
+
+void addatAny(struct node **headpointer,int x,int pos)
+                           {struct node *ptr=*headpointer;
+                            struct node *temp=(struct node*)malloc(sizeof(struct node));
+                            temp->data=x;
+                            temp->c=6969;
+                            temp->link=NULL;
+                            if(pos==1) {temp->link=*headpointer; *headpointer=temp;}
+                            else { while(--pos!=1) ptr=ptr->link;  //why 1 caz we are selecting the butone
+                                   temp->link=ptr->link;
+                                   ptr->link=temp;
+                                 }
+                           }
+
+
+void removFront(struct node **headpointer)
+                           { struct node *temp=*headpointer;
+                             *headpointer=(*headpointer)->link;
+                             free(temp); temp=NULL;
+                           }
+//removFront is optimized than removFront2
+struct node* removFront2(struct node *head)
+                           { struct node *temp=head;
+                             head=head->link;
+                             free(temp); temp=NULL;
+                             return head;
+                           }
+
+void removLast(struct node **headpointer)
+                           {if(*headpointer==NULL) printf("empty.....");
+                            else if((*headpointer)->link==NULL) { free(*headpointer); *headpointer=NULL;}
+                            else { struct node *temp=*headpointer;
+                                   while(temp->link->link!=NULL) temp=temp->link;
+                                   free(temp->link);
+                                   temp->link=NULL;
+                                 }
+                           }
+void removAny(struct node **headpointer,int pos)
+                           {if(*headpointer==NULL) printf("empty.....");
+                            else if(pos==1) { free(*headpointer); *headpointer=NULL;}
+                            else { struct node *prev=*headpointer;
+                                   struct node *cur =*headpointer;
+                                   while(--pos!=0) {prev=cur; ////why 0 caz we are selecting the exact one
+                                                    cur=cur->link; }
+                                   prev->link=cur->link;
+                                   free(cur);
+                                   cur=NULL;
+                                 }
+                           }
+struct node* removALL(struct node *head)
+                           {struct node *temp=head;
+                            while(temp!=NULL) { head=head->link;
+                                                free(temp);
+                                                temp=head;
+                                              }
+                            return temp; //or return head;
+                           }
+struct node* Rev(struct node *head)
+                           { struct node *prev=NULL;
+                             struct node *next=NULL;
+                             while(head!=NULL) { next=head->link;
+                                                 head->link=prev;
+                                                 prev=head;
+                                                 head=next;
+                                               }                 
+                             return prev;
+                           }
+int main()
+{ 
+  
+  struct node *head=NULL;
+  head =(struct node*)malloc(sizeof(struct node));
+  head->data=1;
+  head->c=6;
+  head->link=NULL;
+  collect(head,5); 
+  print(head);  printf("\n\n");
+
+  head=addatfront(head,8);
+  //addatfront2(&head,8);
+
+  addatend(head,88);
+  /*.............
+  struct head *tailptr=head;
+  tailptr=addatend2(tailptr,4);
+  tailptr=addatend2(tailptr,3);
+  tailptr=addatend2(tailptr,2);
+  ...............*/
+  print(head);  printf("\n\n");
+  addatAny(&head,6969,1); 
+  print(head);  printf("\n\n");
+  removFront(&head);
+  //head=removFront2(head);
+  print(head);  printf("\n\n");
+  removLast(&head);
+
+  removAny(&head,4); 
+  print(head);  printf("\n\n");
+  printf("...");
+  //head=removALL(head);
+  head=Rev(head);
+  print(head);
+  return 0;
+}
+/* LINKED LIST________________________________________________________________________________________
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{int data,c;
+ struct node *link;
+};
+void collect(struct node *head,int n)
+{struct node *temp,*current=head;
+ while(n!=0){ temp=(struct node*)malloc(sizeof(struct node));
+              scanf("%d",&temp->data);temp->c=n;
+              temp->link=NULL;
+              current->link=temp;
+              current=temp;
+              n--;
+            }
+}
+void print(struct node *head){ struct node *temp=head;
+                               while(temp!=NULL) { printf("%d,%d ",temp->data,temp->c);
+                                                   temp=temp->link;}
+                             }
+int main()
+{ struct node *head=NULL;
+  
+  head =(struct node*)malloc(sizeof(struct node));
+  head->data=1;
+  head->c=6;
+
+  head->link=NULL;
+  collect(head,5); 
+  print(head);
+  //printf("..%d %d..",head->data,head->c);
+  return 0;
+}
+*/
+
+/*__________________________________________________________________________________________________
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{int data,c;
+ struct node *link;
+};
+
+
+void collect(struct node *head,int n)
+                {struct node *temp,*current=head;
+                 while(n!=0){ temp=(struct node*)malloc(sizeof(struct node));
+                              scanf("%d",&temp->data);temp->c=n;
+                              temp->link=NULL;
+                              current->link=temp;
+                              current=temp;
+                              n--;
+                             }
+                 }
+void print(struct node *head){ struct node *temp=head;
+                               while(temp!=NULL) { printf("%d,%d ",temp->data,temp->c);
+                                                   temp=temp->link;}
+                             }
+
+
+struct node* addatfront(struct node *head,int x)
+                          {struct node *temp=(struct node*)malloc(sizeof(struct node));
+                           temp->data=x;
+                           temp->c=69;
+                           temp->link=head;
+                           return temp;
+                          }
+//addatfront2 is optimized than addatfront                        
+struct node* addatfront2(struct node **headpointer,int x)
+                          {struct node *temp=(struct node*)malloc(sizeof(struct node));
+                           temp->data=x;
+                           temp->c=69;
+                           temp->link=*headpointer; //by dereferencing the headpointer(dobuble pointer) w'll get head(normal pointer)  
+                           *headpointer=temp;
+                          }
+
+
+void addatend(struct node *head,int x)
+                          {struct node *temp=(struct node*)malloc(sizeof(struct node));
+                           struct node *ptr=head;
+                           temp->data=x;
+                           temp->c=69;
+                           temp->link=NULL;
+                           while(ptr->link!=NULL) ptr=ptr->link;
+                           ptr->link=temp;
+                          }
+//addatend2 is optimized than addatend but dont use caz we need to change entire code                          
+struct node* addatend2(struct node *tailptr,int x)
+                           {struct node *temp=(struct node*)malloc(sizeof(struct node));
+                            temp->data=x;
+                            temp->c=69;
+                            temp->link=NULL;
+                            tailptr->link=temp;
+                            return temp;
+                           }
+
+
+void addatmid(struct node *head,int x,int pos)
+                           {struct node *ptr=head;
+                            struct node *temp=(struct node*)malloc(sizeof(struct node));
+                            temp->data=x;
+                            temp->c=6969;
+                            temp->link=NULL;
+                            while(--pos!=1) ptr=ptr->link;
+                            temp->link=ptr->link;
+                            ptr->link=temp;
+                           }
+
+
+void removFront(struct node **headpointer)
+                           { struct node *temp=*headpointer;
+                             *headpointer=(*headpointer)->link;
+                             free(temp); temp=NULL;
+                           }
+//removFront is optimized than removFront2
+struct node* removFront2(struct node *head)
+                           { struct node *temp=head;
+                             head=head->link;
+                             free(temp); temp=NULL;
+                             return head;
+                           }
+
+int main()
+{ struct node *head=NULL;
+  head =(struct node*)malloc(sizeof(struct node));
+  head->data=1;
+  head->c=6;
+  head->link=NULL;
+  collect(head,5); 
+  print(head);
+  printf("\n\n");
+
+  head=addatfront(head,8);
+  //addatfront2(&head,8);
+
+  addatend(head,88);
+  /..............*
+  struct head *tailptr=head;
+  tailptr=addatend2(tailptr,4);
+  tailptr=addatend2(tailptr,3);
+  tailptr=addatend2(tailptr,2);
+  *............../
+
+ addatmid(head,6969,3);
+
+  removFront(&head);
+  //head=removFront2(head);
+  
+  print(head);
+  return 0;
+}
+
+*/
+
+
+
+_________________________________________________________________________________________________________________________________________________________________________________
+Polynomial_addition
+
+#include <stdio.h>
+#include <stdlib.h>
+struct polyNode
+{ int coeff;
+  int pow;
+  struct polyNode *next;
+};
+struct polyNode* addatend(struct polyNode *tailptr,int x,int y)
+                           {struct polyNode *temp=(struct polyNode*)malloc(sizeof(struct polyNode));
+                            temp->coeff=x;
+                            temp->pow=y;
+                            temp->next=NULL;
+                            tailptr->next=temp;
+                            return temp;
+                           }
+struct polyNode* add(struct polyNode *p1,struct polyNode *p2)
+                          {struct polyNode *t1=p1;
+                           struct polyNode *t2=p2;
+                           struct polyNode *temp=(struct polyNode*)malloc(sizeof(struct polyNode));
+                           struct polyNode *t3=temp;
+                           while(t1!=NULL && t2!=NULL)
+                                   {if(t1->pow>t2->pow) 
+                                         {temp=addatend(temp,t1->coeff,t1->pow); t1=t1->next;}
+                                    else if(t2->pow>t1->pow) 
+                                         {temp=addatend(temp,t2->coeff,t2->pow); t2=t2->next;}
+                                    else {temp=addatend(temp,t1->coeff+t2->coeff,t1->pow);
+                                          t1=t1->next;
+                                          t2=t2->next;
+                                         }
+                                   }
+                           while(t1!=NULL) { temp=addatend(temp,t1->coeff,t1->pow);
+                                             t1=t1->next;
+                                           }
+                           while(t2!=NULL) { temp=addatend(temp,t2->coeff,t2->pow);
+                                             t2=t2->next;
+                                           }
+                           return t3->next;
+                          }
+void show(struct polyNode* ptr)
+                          { struct polyNode* t=ptr;
+                            while(t!=NULL) { if(t->pow==0) printf("%d\n",t->coeff);
+                                             else printf("%dx^%d+",t->coeff,t->pow);
+                                             t=t->next;
+                                            }
+                          }
+
+
+int main() 
+{ int n,m,i;
+  struct polyNode* temp1=(struct polyNode*)malloc(sizeof(struct polyNode));
+  struct polyNode* poly1=temp1;
+  struct polyNode* temp2=(struct polyNode*)malloc(sizeof(struct polyNode));
+  struct polyNode* poly2=temp2;
+  
+  scanf("%d",&n); int a1[n][n];
+  for(i=0;i<n;i++) scanf("%d",&a1[0][i]);
+  for(i=0;i<n;i++) scanf("%d",&a1[1][i]);
+  for(i=0;i<n;i++) temp1=addatend(temp1,a1[0][i],a1[1][i]);
+  
+  scanf("%d",&m); int a2[m][m];
+  for(i=0;i<m;i++) scanf("%d",&a2[0][i]);
+  for(i=0;i<m;i++) scanf("%d",&a2[1][i]);
+  for(i=0;i<m;i++) temp2=addatend(temp2,a2[0][i],a2[1][i]);
+  
+  poly1=poly1->next; poly2=poly2->next;
+  struct polyNode *poly3=add(poly1,poly2); 
+  show(poly3);
+  return 0;
+}
+____________________________________________________________________________________________________________________________________________________________________________________________

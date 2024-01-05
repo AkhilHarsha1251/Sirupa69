@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct polyNode
+{ int coeff;
+  int pow;
+  struct polyNode *next;
+};
+struct polyNode* addatend(struct polyNode *tailptr,int x,int y)
+                           {struct polyNode *temp=(struct polyNode*)malloc(sizeof(struct polyNode));
+                            temp->coeff=x;
+                            temp->pow=y;
+                            temp->next=NULL;
+                            tailptr->next=temp;
+                            return temp;
+                           }
+struct polyNode* add(struct polyNode *p1,struct polyNode *p2)
+                          {struct polyNode *t1=p1;
+                           struct polyNode *t2=p2;
+                           struct polyNode *temp=(struct polyNode*)malloc(sizeof(struct polyNode));
+                           struct polyNode *t3=temp;
+                           while(t1!=NULL && t2!=NULL)
+                                   {if(t1->pow>t2->pow) 
+                                         {temp=addatend(temp,t1->coeff,t1->pow); t1=t1->next;}
+                                    else if(t2->pow>t1->pow) 
+                                         {temp=addatend(temp,t2->coeff,t2->pow); t2=t2->next;}
+                                    else {temp=addatend(temp,t1->coeff+t2->coeff,t1->pow);
+                                          t1=t1->next;
+                                          t2=t2->next;
+                                         }
+                                   }
+                           while(t1!=NULL) { temp=addatend(temp,t1->coeff,t1->pow);
+                                             t1=t1->next;
+                                           }
+                           while(t2!=NULL) { temp=addatend(temp,t2->coeff,t2->pow);
+                                             t2=t2->next;
+                                           }
+                           return t3->next;
+                          }
+void show(struct polyNode* ptr)
+                          { struct polyNode* t=ptr;
+                            while(t!=NULL) { if(t->pow==0) printf("%d\n",t->coeff);
+                                             else printf("%dx^%d+",t->coeff,t->pow);
+                                             t=t->next;
+                                            }
+                          }
+
+
+int main() 
+{ int n,m,i;
+  struct polyNode* temp1=(struct polyNode*)malloc(sizeof(struct polyNode));
+  struct polyNode* poly1=temp1;
+  struct polyNode* temp2=(struct polyNode*)malloc(sizeof(struct polyNode));
+  struct polyNode* poly2=temp2;
+  
+  scanf("%d",&n); int a1[n][n];
+  for(i=0;i<n;i++) scanf("%d",&a1[0][i]);
+  for(i=0;i<n;i++) scanf("%d",&a1[1][i]);
+  for(i=0;i<n;i++) temp1=addatend(temp1,a1[0][i],a1[1][i]);
+  
+  scanf("%d",&m); int a2[m][m];
+  for(i=0;i<m;i++) scanf("%d",&a2[0][i]);
+  for(i=0;i<m;i++) scanf("%d",&a2[1][i]);
+  for(i=0;i<m;i++) temp2=addatend(temp2,a2[0][i],a2[1][i]);
+  
+  poly1=poly1->next; poly2=poly2->next;
+  struct polyNode *poly3=add(poly1,poly2); 
+  show(poly3);
+  return 0;
+}
